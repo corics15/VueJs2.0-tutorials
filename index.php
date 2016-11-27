@@ -19,7 +19,7 @@
 			[v-cloak] {
 				display: none;
 			}
-			li, input, label, h1 span {
+			li, input, label, span {
 				font-family: 'Archivo Narrow', sans-serif;
 			}
 			.same-width {
@@ -27,6 +27,9 @@
 			}
 			.whatLevel {
 				color: #EF6733 !important;
+			}
+			ul {
+				margin-left: 135px;
 			}
 		</style>
     </head>
@@ -37,15 +40,16 @@
 				<div class="col-lg-6 col-md-6 col-sm-6">
 					<div id="app">
 						<h3 :title="title" v-cloak>{{ message }}</h3>
-						<img :src="url" :data-title="title" data-placement="bottom" data-toggle="tooltip" height="200" width="200" class="img-thumbnail">
+						<img :src="url" :data-title="title" data-placement="bottom" data-toggle="tooltip" height="150" width="150" class="img-thumbnail pull-left">
 						<div class="form-group">
+							<span>&nbsp;&nbsp;&nbsp;<strong>Using a foreach loop:</strong></span>
 							<ul>
 								<li v-for="todo in todos" v-cloak>{{ todo.item }}</li>
 							</ul>
 						</div>
 
 						<div class="form-group">
-							<label for="input">Try changing the text below:</label>
+							<label for="input">Data Binding: Try changing the text below:</label>
 							<p><input type="text" name="name" id="input" class="form-control" placeholder="I am bound to the above title" v-model="message"></p>
 							<label>Count: {{ count }}</label>
 						</div>
@@ -74,18 +78,31 @@
 							<p>
 								<h1>Hello {{ fullname }}</h1>
 							</p>
-							<div><small>First: {{ first}}</small></div>
-							<div><small>Last : {{ last }}</small></div>
+							<div class="well">
+								<div><small>First: {{ first}}</small></div>
+								<div><small>Last: {{ last }}</small></div>
+							</div>
 						</div>
+
 						<div class="form-group">
 							<label for="fname">First Name:</label>
 							<input v-model="first" type="text" id="fname" class="form-control">
 						</div>
+
 						<div class="form-group">
+							<div><small><em>Getter</em></small></div>
 							<label for="lname">Last Name:</label>
 							<input v-model="last" type="text" id="lname" class="form-control">
 						</div>
+
+						<div class="form-group">
+							<div><small><em>Setter</em></small></div>
+							<label for="fullName">Fullname:</label>
+							<input type="text" id="fullName" class="form-control" v-model="fullname">
+						</div>
+
 						<hr>
+
 						<div class="form-group text-center">
 							<h1>You are: <span class="whatLevel">{{ whatLevel }}</span></h1>
 							<hr>
@@ -106,6 +123,14 @@
 					</div>
 				</div>
 			</div>
+
+			<div class="row">
+				<div class="col-lg-6 col-md-6 col-sm-6">
+					<div id="app-3">
+
+					</div>
+				</div>
+			</div>
 		</div>
 
     </body>
@@ -118,7 +143,7 @@
     	var app = new Vue({
     		el 		: '#app',
     		data 	: {
-    			message 	: 'Hello Vue JS2.0',
+    			message 	: 'Vue JS 2.0',
     			title 		: 'Welcome to VueJS2 ' + new Date(),
     			url 		: 'http://vuejs.org/images/logo.png',
     			todos 		: [
@@ -163,8 +188,17 @@
     			},
     		},
     		computed: {
-    			fullname : function() {
-    				return this.first+' '+this.last;
+    			fullname : {
+    				// getter function
+    				get: function() {
+    					return this.first+' '+this.last;
+    				},
+    				// setter function
+    				set: function(value) {
+    					var name = value.split(' ');
+    					this.first = name[0];
+    					this.last  = name[name.length - 1];
+    				}
     			},
     			whatLevel: function(){
     				if (this.xp <= 0) {
@@ -179,6 +213,13 @@
     					return 'Master';
     				}
     			},
+    		}
+    	});
+
+    	var app3 = new Vue({
+    		el 		: '#app-3',
+    		data 	: {
+
     		}
     	});
     </script>
