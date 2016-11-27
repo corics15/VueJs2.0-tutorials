@@ -168,7 +168,7 @@
     			},
     			whatLevel: function(){
     				if (this.xp <= 0) {
-    					return 'Loser';
+    					return 'A Loser';
     				} else if (this.xp <= 50) {
     					return 'Beginner';
     				} else if (this.xp <= 75) {
