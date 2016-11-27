@@ -13,7 +13,7 @@
 		<style>
 			@import url('https://fonts.googleapis.com/css?family=Oswald');
 			@import url('https://fonts.googleapis.com/css?family=Archivo+Narrow');
-			h3, h4 {
+			h1, h3, h4 {
 				font-family: 'Oswald', sans-serif;
 			}
 			[v-cloak] {
@@ -167,14 +167,16 @@
     				return this.first+' '+this.last;
     			},
     			whatLevel: function(){
-    				if (this.xp <= 50) {
-    					return this.level = 'Beginner';
+    				if (this.xp <= 0) {
+    					return 'Loser';
+    				} else if (this.xp <= 50) {
+    					return 'Beginner';
     				} else if (this.xp <= 75) {
-    					return this.level = 'Novice';
+    					return 'Novice';
     				} else if (this.xp <= 100) {
-    					return this.level = 'Expert';
+    					return 'Expert';
     				} else {
-    					return this.level = 'Master';
+    					return 'Master';
     				}
     			},
     		}
