@@ -39,7 +39,7 @@
 			<div class="row">
 				<div class="col-lg-6 col-md-6 col-sm-6">
 					<div id="app">
-						<h3 :title="title" v-cloak>{{ message }}</h3>
+						<h1 :title="title" v-cloak>{{ message }}</h1>
 						<img :src="url" :data-title="title" data-placement="bottom" data-toggle="tooltip" height="150" width="150" class="img-thumbnail pull-left">
 						<div class="form-group">
 							<span>&nbsp;&nbsp;&nbsp;<strong>Using a foreach loop:</strong></span>
@@ -124,10 +124,25 @@
 				</div>
 			</div>
 
-			<div class="row">
-				<div class="col-lg-6 col-md-6 col-sm-6">
-					<div id="app-3">
+			<hr>
 
+			<div class="row">
+				<div class="col-md-6 col-lg-6">
+					<div><h1>AJAX to external API</h1></div>
+					<div id="app-3">
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="text1">Enter a zip code:</label>
+									<input type="text" class="form-control" placeholder="Enter a zip code" v-model="startZip">
+									<span class="span-result help-block" v-cloak>{{ startCity }}</span>
+								</div>
+
+								<div class="form-group">
+									<a href="http://www.cexx.org/zipcode.htm" target="_blank">US Zipcode Listing</a>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -219,7 +234,35 @@
     	var app3 = new Vue({
     		el 		: '#app-3',
     		data 	: {
-
+    			startZip	: '',
+    			startCity	: '',
+    			endZip 		: '',
+    			endCity 	: '',
+    		},
+    		watch 	: {
+    			startZip 	: function() {
+    				this.startCity = '';
+    				if (this.startZip.length >= 5) {
+    					// call API method
+    					this.lookupStartZip();
+    				}
+    			}
+    		},
+    		methods : {
+    			lookupStartZip: function() {
+    				var json = this;
+    				setTimeout(function() {
+    					json.startCity = 'Searching...';
+    					$.getJSON('http://ziptasticapi.com/'+json.startZip, function(data) {
+    						if (data.error != '') {
+    							json.startCity = data.error;
+    						}
+    						if (data.error === undefined) {
+    							json.startCity = data.city + ', ' + data.state;
+    						}
+    					})
+    				}, 500)
+    			},
     		}
     	});
     </script>
