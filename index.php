@@ -9,10 +9,11 @@
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 		<!-- Optional theme -->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+		<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 		<style>
 			@import url('https://fonts.googleapis.com/css?family=Oswald');
 			@import url('https://fonts.googleapis.com/css?family=Archivo+Narrow');
-			div h3 {
+			h3, h4 {
 				font-family: 'Oswald', sans-serif;
 			}
 			[v-cloak] {
@@ -20,6 +21,12 @@
 			}
 			li, input, label, h1 span {
 				font-family: 'Archivo Narrow', sans-serif;
+			}
+			.same-width {
+				width: 60%;
+			}
+			.whatLevel {
+				color: #EF6733 !important;
 			}
 		</style>
     </head>
@@ -31,22 +38,33 @@
 					<div id="app">
 						<h3 :title="title" v-cloak>{{ message }}</h3>
 						<img :src="url" :data-title="title" data-placement="bottom" data-toggle="tooltip" height="200" width="200" class="img-thumbnail">
-						<ul>
-							<li v-for="todo in todos" v-cloak>{{ todo.item }}</li>
-						</ul>
+						<div class="form-group">
+							<ul>
+								<li v-for="todo in todos" v-cloak>{{ todo.item }}</li>
+							</ul>
+						</div>
 
-						<p>Try changing the text below:</p>
-						<p><input type="text" name="name" id="input" class="form-control" placeholder="I am bound to the above title" v-model="message"></p>
-						<p>Count: {{ count }}</p>
-						<p>
-							<button @click="countUp" type="button" class="btn btn-info">Press me to count up</button>
-							<button @click="countDown" type="button" class="btn btn-warning">Press me to count down</button>
-						</p>
+						<div class="form-group">
+							<label for="input">Try changing the text below:</label>
+							<p><input type="text" name="name" id="input" class="form-control" placeholder="I am bound to the above title" v-model="message"></p>
+							<label>Count: {{ count }}</label>
+						</div>
 
-						<label for="">Enter a url below</label>
-						<p><input type="text" class="form-control" placeholder="Enter a URL" v-model="urlB"></p>
-						<p><button @click="humanizeURL" type="button" class="btn btn-primary">Strip Link</button></p>
-						<p>Stripped Link: <a :href="urlB" target="_blank">{{ cleanURL }}</a></p>
+						<div class="form-group">
+							<div class="col-md-6">
+								<button @click="countUp" type="button" class="btn btn-info btn-block same-width">Count up</button>
+							</div>
+							<div class="col-md-6">
+								<button @click="countDown" type="button" class="btn btn-warning btn-block same-width">Count down</button>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="">Enter a url below</label>
+							<p><input type="text" class="form-control" placeholder="Enter a URL" v-model="urlB"></p>
+							<p><button @click="humanizeURL" type="button" class="btn btn-primary">Strip Link</button></p>
+							<p>Stripped Link: <a :href="urlB" target="_blank">{{ cleanURL }}</a></p>
+						</div>
 					</div>
 				</div>
 
@@ -66,6 +84,24 @@
 						<div class="form-group">
 							<label for="lname">Last Name:</label>
 							<input v-model="last" type="text" id="lname" class="form-control">
+						</div>
+						<hr>
+						<div class="form-group text-center">
+							<h1>You are: <span class="whatLevel">{{ whatLevel }}</span></h1>
+							<hr>
+							<div class="row">
+								<div class="col-md-12">
+									<h4>Current XP: <strong>{{ xp }}</strong></h4>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-6">
+									<button @click="addXP" type="button" class="btn btn-success same-width"><i class="fa fa-caret-square-o-up"></i> Add XP</button>
+								</div>
+								<div class="col-md-6">
+									<button @click="decXP" type="button" class="btn btn-danger same-width"><i class="fa fa-caret-square-o-down"></i> Decrease XP</button>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -96,6 +132,7 @@
     			count 		: 0,
     			urlB 		: '',
     			cleanURL 	: '',
+    			level 		: '',
     		},
 			methods 	: {
 				countUp 	: function() {
@@ -115,11 +152,31 @@
     		data 	: {
     			first 	: '',
     			last 	: '',
+    			xp 		: 10,
+    		},
+    		methods : {
+    			addXP 	: function(){
+    				this.xp += 5;
+    			},
+    			decXP 	: function() {
+    				this.xp -= 5;
+    			},
     		},
     		computed: {
     			fullname : function() {
     				return this.first+' '+this.last;
-    			}
+    			},
+    			whatLevel: function(){
+    				if (this.xp <= 50) {
+    					return this.level = 'Beginner';
+    				} else if (this.xp <= 75) {
+    					return this.level = 'Novice';
+    				} else if (this.xp <= 100) {
+    					return this.level = 'Expert';
+    				} else {
+    					return this.level = 'Master';
+    				}
+    			},
     		}
     	});
     </script>
